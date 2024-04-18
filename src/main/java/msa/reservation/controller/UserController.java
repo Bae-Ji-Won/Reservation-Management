@@ -1,0 +1,23 @@
+package msa.reservation.controller;
+
+import lombok.RequiredArgsConstructor;
+import msa.reservation.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class UserController {
+
+
+    private final UserService userService;
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<String> getUserName(@PathVariable Long id){
+        String name = userService.getUsernameById(id);
+        return new ResponseEntity<>(name, HttpStatus.OK);
+    }
+}
