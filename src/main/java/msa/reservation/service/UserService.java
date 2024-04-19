@@ -1,7 +1,11 @@
 package msa.reservation.service;
 
 import lombok.RequiredArgsConstructor;
-import msa.reservation.repository.EmployeeEntity;
+import msa.reservation.domain.entity.User;
+import msa.reservation.dto.UserDto;
+import msa.reservation.dto.request.UserJoinRequest;
+import msa.reservation.exception.ApplicationException;
+import msa.reservation.exception.ErrorCode;
 import msa.reservation.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +14,11 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    public String getUsernameById(Long id) {
-        EmployeeEntity employee = userRepository.getFirstById(id);
-        return employee.getName();
+
+    public User join(UserJoinRequest request){
+        userRepository.findByUserName(request.userName()).ifPresent(it -> {
+            throw new ApplicationException(ErrorCode.USER_NOT_FOUND);
+        });
+        User user = userRepository.save(User.of())
     }
 }
