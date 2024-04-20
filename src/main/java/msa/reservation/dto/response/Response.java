@@ -1,4 +1,4 @@
-package msa.reservation.response;
+package msa.reservation.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

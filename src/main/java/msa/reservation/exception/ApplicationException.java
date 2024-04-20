@@ -16,11 +16,6 @@ public class ApplicationException extends RuntimeException {
         this.message = null;
     }
 
-    public ApplicationException(ErrorCode errorCode,String message){
-        this.errorCode = errorCode;
-        this.message = message;
-    }
-
     @Override
     public String getMessage() {
         if (message == null){
