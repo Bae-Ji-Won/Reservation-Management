@@ -1,23 +1,24 @@
 package msa.reservation.controller;
 
 import lombok.RequiredArgsConstructor;
+import msa.reservation.dto.request.UserJoinRequest;
+import msa.reservation.dto.response.UserJoinResponse;
+import msa.reservation.response.Response;
 import msa.reservation.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
-
     private final UserService userService;
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<String> getUserName(@PathVariable Long id){
-        String name = userService.getUsernameById(id);
-        return new ResponseEntity<>(name, HttpStatus.OK);
+    @PostMapping("/join")
+    public Response<UserJoinResponse> join(@RequestBody UserJoinRequest request){
+
+
+        return Response.success()
     }
+
 }
