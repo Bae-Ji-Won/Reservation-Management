@@ -2,7 +2,7 @@ package msa.reservation.exception;
 
 
 import lombok.extern.slf4j.Slf4j;
-import msa.reservation.response.Response;
+import msa.reservation.dto.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
