@@ -1,0 +1,49 @@
+spring:
+  datasource:
+    url: ${DB_CONNECTION_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  mail:
+    senderEmail-address: ${EMAIL_ADDRESS}
+    host: smtp.gmail.com # 1. SMTP 서버 호스트
+    port: 587 # 2. SMTP 서버 포트
+    username: ${MAIL_USERNAME} # 3. SMTP 서버 로그인 아이디
+    password: ${MAIL_PASSWORD} # 4. 앱 비밀번호
+    properties:
+      mail:
+        smtp:
+          auth: true # 5. 사용자 인증 시도 여부(기본값 false)
+          timeout: 5000 # 6. Socket Read Timeout 시간
+          starttls:
+            enable: true # 7. StartTLS 활성화 여부
+
+  encodeSecretKey: ${ENCODE_SECRET_KEY}
+  encodeEmailSecretKey: ${ENCODE_EMAILSECRET_KEY}
+
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  token:
+    # 1 Hour = 60*60 * 1000(ms)
+    expired-time-ms : 3600000
+    # 30 days = 24*60*60*30 * 1000(ms)
+    refresh-expired-time-ms: 2592000000
+
