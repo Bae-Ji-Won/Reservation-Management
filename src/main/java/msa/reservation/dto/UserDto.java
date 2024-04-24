@@ -34,16 +34,16 @@ public record UserDto(
     public static UserDto from(User user){
         return new UserDto(
                 user.getId(),
-                user.getUserName(),
+                user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
                 user.getAddress(),
                 user.getCallNumber(),
                 user.getRole(),
                 user.getCreatedAt(),
-                user.getUserName(),
+                user.getUsername(),
                 user.getUpdatedAt(),
-                user.getUserName()
+                user.getUsername()
         );
     }
 

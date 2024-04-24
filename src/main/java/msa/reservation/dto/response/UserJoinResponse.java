@@ -18,7 +18,7 @@ public record UserJoinResponse (
         );
     }
 
-    public static UserJoinResponse of(Long id, String userName, String email){
+    private static UserJoinResponse of(Long id, String userName, String email){
         return new UserJoinResponse(id,userName,email);
     }
 }

@@ -4,22 +4,28 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
 import msa.reservation.domain.constant.UserRole;
+import msa.reservation.dto.request.MypageRequest;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name ="\"user\"",
         indexes = {
-            @Index(columnList = "createdAt")
+                @Index(columnList = "createdAt")
         }
 )
 @Getter
 @ToString(callSuper = true)
 @SQLDelete(sql = "UPDATE \"user\" SET deleted_at = NOW() where id=?")       // jpa에서 delete사용하여 deledt 쿼리문 동작 시 자동으로 user DB에 deleted_at칸에는 현재 시간이 자동으로 들어감
 @Where(clause = "deleted_at is NULL")  // where문 쿼리 동작 시 deleted_at이 null인 값 즉, 아직 삭제되지 않은 값만 가져옴
-public class User extends BaseEntity{
+public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -66,5 +72,50 @@ public class User extends BaseEntity{
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(this.getRole().toString()));
+    }
 
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+
+    @Override
+    public String getUsername() {
+        return this.userName;
+    }
+
+    public String getEamil(){
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.deletedAt == null;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.deletedAt == null;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.deletedAt == null;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.deletedAt == null;
+    }
+
+
+    public void update(MypageRequest request){
+        this.address = request.getAddress();
+        this.callNumber = request.getCallNumber();
+        this.password = request.getPassword();
+    }
 }
