@@ -4,15 +4,16 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+@Component
 public class JwtTokenUtils {
 
-
-    public static String getuserName(String token,String key){
+    public static String getEmail(String token,String key){
         return extractClaims(token,key).get("email",String.class);
     }
 
@@ -28,10 +29,16 @@ public class JwtTokenUtils {
                 .build().parseClaimsJws(token).getBody();           // 키 값이 같다면 Claims 객체 생성 (외부에서 받아온 토큰안에 들어있는 정보를 담고 있음)
     }
 
-    // 토큰에 정보 넣기
-    public static String generateToken(String email, String key, long expiredTimeMs){
+    // Access Token인지 Refresh Token인지 확인 (Category 확인)
+    public static String getCategory(String token,String key){
+        return Jwts.parserBuilder().setSigningKey(getKey(key)).build().parseClaimsJws(token).getBody().get("category",String.class);
+    }
+
+    // 토큰에 정보 반환
+    public static String generateToken(String category, String email, String key, long expiredTimeMs){
         // claims에 username 저장
         Claims claims = Jwts.claims();
+        claims.put("category", category);
         claims.put("email",email);
 
         return Jwts.builder()
@@ -44,6 +51,9 @@ public class JwtTokenUtils {
                 .signWith(getKey(key), SignatureAlgorithm.HS256)
                 .compact();
     }
+    
+    // Header에 토큰 넣기
+    
 
     public static Key getKey(String key){
         byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
