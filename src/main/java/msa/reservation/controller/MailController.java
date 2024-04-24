@@ -2,11 +2,10 @@ package msa.reservation.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import msa.reservation.dto.request.MailCheckRequest;
 import msa.reservation.dto.request.MailRequest;
 import msa.reservation.dto.response.Response;
-import msa.reservation.service.MailService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import msa.reservation.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -15,16 +14,17 @@ import java.util.HashMap;
 @RequestMapping("/api/v1/mail")
 @RestController
 public class MailController {
-    private final MailService mailService;
+
+    private final UserService userservice;
     private int number; // 이메일 인증 숫자를 저장하는 변수
 
     // 인증 이메일 전송
-    @PostMapping("/mailSend")
+    @PostMapping("/sendEmail")
     public HashMap<String, Object> mailSend(@RequestBody MailRequest request) {
         HashMap<String, Object> map = new HashMap<>();
 
         try {
-            number = mailService.sendMail(request.mail());
+            number = userservice.sendMail(request.mail());
             String num = String.valueOf(number);
 
             map.put("success", Boolean.TRUE);
@@ -39,10 +39,13 @@ public class MailController {
 
     // 인증번호 일치여부 확인
     @GetMapping("/mailCheck")
-    public Response<?> mailCheck(@RequestParam String userNumber) {
+    public Response<?> mailCheck(@RequestBody MailCheckRequest request) {
 
-        boolean isMatch = userNumber.equals(String.valueOf(number));
+        boolean isMatch = request.num() == number;
 
-        return Response.success(isMatch);
+        if(isMatch){
+            return Response.success(isMatch);
+        }
+        return Response.error(isMatch);
     }
 }
